@@ -9,5 +9,11 @@ package pseudocode_converter;
  *
  * @author bruno
  */
-public class Rules {
+class VarDeclarationException extends Exception {
+
+    public VarDeclarationException() {}
+    
+    public VarDeclarationException(String message){
+        super(message);
+    }
 }

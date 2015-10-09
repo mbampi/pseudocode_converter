@@ -21,20 +21,23 @@ public class Main {
         Scanner read = new Scanner(System.in);
         System.out.println("Digite o arquivo que quer converter!");
         String fileName = read.nextLine();
-        String file = "";
-        
-        System.out.println("\n Conteúdo do arquivo do texto:\n");
+        String[] file = null;
         
         try {
             FileReader fr = new FileReader("/home/bruno/"+fileName);
             BufferedReader br = new BufferedReader(fr);
             
-            String line = br.readLine(); // Lê a primeira linha
+            String line = br.readLine();
+            file[0] = line;
             
-            while (line != null) {
-                file = file + br.readLine() + "\n";
-                line = br.readLine();
+            for(int i = 1; line != null; i++){
+                file[i] = br.readLine();
             }
+            
+            /*while (line != null) {
+            file = file + br.readLine() + "\n";
+            line = br.readLine();
+            }*/
             Analysis a = new Analysis(file);
             a.LexicalAnalysis();
             br.close();
