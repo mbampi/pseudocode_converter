@@ -55,25 +55,25 @@ public class PolishNotation {
         LinkedList<Symbol> postfixQueue = new LinkedList<>();
         
         while(!infixQueue.isEmpty()){
-            queueSymbol = infixQueue.removeLast();
+            queueSymbol = infixQueue.pop();
             if(queueSymbol.isOperand()){
-                postfixQueue.addFirst(queueSymbol);
+                postfixQueue.add(queueSymbol);
             }else if(queueSymbol.isOpenParenthesis()){
                 convStack.add(queueSymbol);
             }else if(queueSymbol.isOperator()){
                 while(!convStack.empty() && queueSymbol.testPriority() < convStack.peek().testPriority()){
-                    postfixQueue.addFirst((Symbol)convStack.pop());
+                    postfixQueue.add((Symbol)convStack.pop());
                 }
                 convStack.add(queueSymbol);
             }else if(queueSymbol.isClosedParenthesis()){
                 while(!convStack.empty() && !convStack.peek().isOpenParenthesis()){
-                    postfixQueue.addFirst(convStack.pop());
+                    postfixQueue.add(convStack.pop());
                 }
                 convStack.pop();
             }
         }
         while(!convStack.empty()){
-            postfixQueue.addFirst((Symbol)convStack.pop());
+            postfixQueue.add((Symbol)convStack.pop());
         }
         this.expression = postfixQueue;
         
@@ -86,7 +86,7 @@ public class PolishNotation {
         Stack<Symbol> calcStack = new Stack<>();
         
         while(!this.expression.isEmpty()){
-            s = this.expression.removeLast();
+            s = this.expression.pop();
             if(s.isOperand()){
                 calcStack.add(s);
             }else if(s.isOperator()){
