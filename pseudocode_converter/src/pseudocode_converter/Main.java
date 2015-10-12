@@ -26,7 +26,7 @@ public class Main {
         String[] file = null;
         
         try {
-            FileReader fr = new FileReader("/home/bruno/"+fileName);
+            FileReader fr = new FileReader("~/pseudocode_converter/"+fileName);
             BufferedReader br = new BufferedReader(fr);
             
             String line = br.readLine();
