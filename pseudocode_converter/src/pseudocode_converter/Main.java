@@ -14,13 +14,15 @@ import java.util.Scanner;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main {
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws RWordNotFoundException, VarDeclarationException, BadExpressionException {
         Scanner read = new Scanner(System.in);
         System.out.println("Digite o arquivo que quer converter!");
         String fileName = read.nextLine();
+        ArrayList fileList = new ArrayList<String>();
         String[] file = null;
         
         try {
@@ -28,18 +30,24 @@ public class Main {
             BufferedReader br = new BufferedReader(fr);
             
             String line = br.readLine();
-            file[0] = line;
             
             for(int i = 1; line != null; i++){
-                file[i] = br.readLine();
+                fileList.add(line);
+                line = br.readLine();
             }
             
-            /*while (line != null) {
-            file = file + br.readLine() + "\n";
-            line = br.readLine();
-            }*/
+            file = new String[fileList.size()];
+            file = (String[]) fileList.toArray(file);
+            
+            for(String s : file)
+                System.out.println(s);
+            
             Analysis a = new Analysis(file);
-            a.LexicalAnalysis();
+            if(a.LexicalAnalysis()){
+                System.out.println("Sem erros no código.");
+            } else {
+                // Tratar erros...
+            }
             br.close();
         }
         

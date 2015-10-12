@@ -10,63 +10,54 @@ package pseudocode_converter;
  * @author bruno
  */
 
-  import java.util.ArrayList;
-
 public class Analysis {
     public String[] file;
-    final ArrayList word;
-
+    
     public Analysis(String[] f) {
         this.file = f;
-        this.word = new ArrayList<>();
-        word.add("inicio");
-        word.add("inteiro");
-        word.add("real");
-        word.add("fim");
-        word.add(":");
-        word.add("=");
     }
     
-    public void LexicalAnalysis() throws RWordNotFoundException, VarDeclarationException{
+    public boolean LexicalAnalysis() throws  RWordNotFoundException, VarDeclarationException, BadExpressionException{
+        
         for(int i = 0; i < file.length; i++){
             String[] line = file[i].split(" ");
             
             if(line.length == 1){
-                if(line[0] != "inicio" || line[0] != "fim"){
-                    throw new RWordNotFoundException("Palavra reservada incorreta.");
+                if (!"inicio".equals(line[0]) && !"fim".equals(line[0])){
+                    throw new RWordNotFoundException("Palavra reservada incorreta."); 
                 }
             } 
             else if (line.length == 3){
-                if(line[1] == ":"){ // Testando se as variáveis foram declaradas corretamente.
-                    String[] var = line[2].split(",");
-                    for (int y = 0; y < var.length;y++){
-                        
-                        /* Gambiarra altamente perigosa. Não faça isso em casa.
-                        try {
-                            int s = Integer.parseInt(var[i].charAt(0)+"");
+                switch (line[1]) {
+                    case ":":
+                        // Testando se as variáveis foram declaradas corretamente.
+                        String[] var = line[2].split(",");
+                        for (int y = 0; y < var.length;y++){
+                            if(Character.isDigit(var[y].charAt(0))){
+                                throw new VarDeclarationException("Erro na declaração das variáveis.");
+                            }
+                        }
+                        if(!"inteiro".equals(line[0]) && !"real".equals(line[0])){
                             throw new VarDeclarationException("Erro na declaração das variáveis.");
                         }
-                        catch (NumberFormatException e){}
-                        */
-                        
-                        if(Character.isDigit(var[y].charAt(0))){
-                            throw new VarDeclarationException("Erro na declaração das variáveis.");
+                    break;
+                    case "=":
+                        String exp = line[2];
+                        for(int y = 0; y<exp.length()-1; y++){
+                            // Testando repetição de operador.
+                            if(exp.charAt(y) == '+' || exp.charAt(y) == '-' || exp.charAt(y) == '*' || exp.charAt(y) == '/'){
+                                if(exp.charAt(y+1) == '+' || exp.charAt(y+1) == '*' || exp.charAt(y+1) == '/'){
+                                    throw new BadExpressionException("Erro na expressão.");
+                                } else if(exp.charAt(y+1) == '-') {
+                                    
+                                }
+                            }
                         }
-                    }
-                }
-                else
-                if(line[1] == "="){
-                    boolean bool = false;
-                    String exp = line[2];
-                    for(int y = 0; bool == false; y++){
-                        if(exp.charAt(y) == '+' || exp.charAt(y) == '-' || exp.charAt(y) == '*' || exp.charAt(y) == '/'){
-                            
-                        }
-                    }
-                    //String[] exp = line[2].split(" ");
+                    break;
                 }
             }
         }
+        return true;
     }
     
 }
