@@ -99,5 +99,14 @@ public class PolishNotation {
         s = calcStack.pop();
         return s;
     }
+    
+    @Override
+    public String toString(){
+        String str = "";
+        for(Symbol s : this.expression){
+            str += s.symbol+" ";
+        }
+        return str;
+    }
 }
 

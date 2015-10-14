@@ -22,11 +22,11 @@ public class Main {
         Scanner read = new Scanner(System.in);
         System.out.println("Digite o arquivo que quer converter!");
         String fileName = read.nextLine();
-        ArrayList fileList = new ArrayList<String>();
+        ArrayList<String> fileList = new ArrayList<>();
         String[] file = null;
         
         try {
-            FileReader fr = new FileReader("~/pseudocode_converter/"+fileName);
+            FileReader fr = new FileReader("/home/bruno/repo/pseudocode_converter/"+fileName);
             BufferedReader br = new BufferedReader(fr);
             
             String line = br.readLine();
@@ -45,6 +45,7 @@ public class Main {
             Analysis a = new Analysis(file);
             if(a.LexicalAnalysis()){
                 System.out.println("Sem erros no código.");
+                System.out.println(a.SyntacticAnalysis());
             } else {
                 // Tratar erros...
             }
