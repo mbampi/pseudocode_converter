@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author Matheus Dussin Bampi
  */
-// fdjgkdjhgkfjh
+// fdjgkdjh
 public class PolishNotation {
     private LinkedList<Symbol> expression;
     
