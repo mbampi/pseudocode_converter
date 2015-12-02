@@ -86,6 +86,11 @@ public class Analysis {
                        t.addRow(AT);
                     }
                 }
+                if("escreva".equals(line[0])){
+                    for (String line1: line){
+                        
+                    }
+                }
                 /*if("se".equals(line[0])){
                     for (String line1 : line) {
                         switch(line1){
