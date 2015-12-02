@@ -76,16 +76,40 @@ public class Analysis {
                 if("=".equals(line[1])){
                     String exp = line[2];
                     if(exp.length() == 1 ){
-                       AT += "AT:"+line[0]+";"+exp+"\n";
+                       AT += "AT;"+line[0]+";"+exp+"\n";
                     }
                     else {
                        PolishNotation pn = new PolishNotation(exp);
                        pn.toPostfix();
                        String e = pn.toString();
-                       AT += "AT:"+line[0]+";"+e+"\n";
+                       AT += "AT;"+line[0]+";"+e+"\n";
                        t.addRow(AT);
                     }
                 }
+                /*if("se".equals(line[0])){
+                    for (String line1 : line) {
+                        switch(line1){
+                            case "==":
+                                String esq = "";
+                                String dir = "";
+                                for (int i = 0; line[i] != line1;i++){
+                                   esq += line[i];
+                                }
+                                for (int i = line.length; line[i] != line1; i--){
+                                   dir += line[i];
+                                }
+                                break;
+                            
+                            case "!=":
+                                break;
+                            
+                            case ">":
+                                break;
+                            
+                            case "<":
+                                break;
+                    }
+                }*/
             }
         }
         return t.toString();
