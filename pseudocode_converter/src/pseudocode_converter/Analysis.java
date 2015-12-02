@@ -118,6 +118,18 @@ public class Analysis {
                         t.addRow("OUTV;"+line[1]+";");
                     }
                 }
+                if("leia".equals(line[0])){
+                    int i;
+                    String var;
+                    String saida;
+                    saida = "IN;";
+                    for(i=1;line[i].charAt(line[i].length()-1) == ','; i++){
+                        var = line[i].substring(0,line[i].length()-1);
+                        saida += var+";";
+                    }
+                    saida += line[i]+";";
+                    t.addRow(saida);
+                }
             }
         }
         return t.toString();
