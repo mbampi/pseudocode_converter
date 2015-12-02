@@ -86,11 +86,6 @@ public class Analysis {
                        t.addRow(AT);
                     }
                 }
-                if("escreva".equals(line[0])){
-                    for (String line1: line){
-                        
-                    }
-                }
                 /*if("se".equals(line[0])){
                     for (String line1 : line) {
                         switch(line1){
@@ -115,6 +110,14 @@ public class Analysis {
                                 break;
                     }
                 }*/
+            } else {
+                if("escreva".equals(line[0])){
+                    if (line[1].charAt(0) == '"' && line[1].charAt(line[1].length()-1) == '"'){
+                        t.addRow("OUTS;"+line[1]+";");
+                    } else {
+                        t.addRow("OUTV;"+line[1]+";");
+                    }
+                }
             }
         }
         return t.toString();

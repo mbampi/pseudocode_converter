@@ -3,4 +3,7 @@ inteiro : n1,n2
 real : r1,r2,r3
 n1 = 3
 n2 = 7*n1
+leia n3
+escreva "Olá"
+escreva n1
 fim
