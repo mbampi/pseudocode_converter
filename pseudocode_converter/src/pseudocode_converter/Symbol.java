@@ -29,12 +29,17 @@ public class Symbol {
     }
     
     public int testPriority(){
-        if(symbol.equals("-") || symbol.equals("+")){
-            return 1;
-        }else if(symbol.equals("(")){
-            return 0;
-        }else{
-            return 2;
+        switch(symbol){
+            case "*": case "/":
+                return 4;
+            case "+": case "-":
+                return 3;
+            case ">": case ">=": case "<": case "<=": case "==": case "<>":
+                return 2;
+            case "não": case "e": case "ou": case "nao":
+                return 1;
+            default:
+                return 0;
         }
     }
     
