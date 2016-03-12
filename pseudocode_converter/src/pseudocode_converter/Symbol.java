@@ -17,7 +17,7 @@ public class Symbol {
     }
     
     public boolean isOperand(){
-        return(symbol.matches("^[0-9]*[.]{0,1}[0-9]*$"));
+        return(!this.isOperator() && !this.isOpenParenthesis() && !this.isClosedParenthesis());//MODIFICADO: isOperand() não levava em conta variaveis, por não serem numeros. Ex: "n1"
     }
     
     public boolean isOpenParenthesis(){

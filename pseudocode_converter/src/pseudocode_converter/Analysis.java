@@ -20,9 +20,9 @@ public class Analysis {
     public boolean LexicalAnalysis() throws  RWordNotFoundException, VarDeclarationException, BadExpressionException{
         
         for (String file1 : file) {
-            String[] line = file1.split(" ");
+            String[] line = file1.split("\\s+");//MODIFICADO: não suportava multiplos espaços.
             if(line.length == 1){
-                if (!"inicio".equals(line[0]) && !"fim".equals(line[0])){
+                if (!"inicio".equals(line[0].toLowerCase()) && !"fim".equals(line[0].toLowerCase())){//MODIFICADO:Adicionado .toLowerCase() para suportar letras M e m
                     throw new RWordNotFoundException("Palavra reservada incorreta."); 
                 }
             } 
@@ -36,7 +36,7 @@ public class Analysis {
                                 throw new VarDeclarationException("Erro na declaração das variáveis.");
                             }
                         }
-                        if(!"inteiro".equals(line[0]) && !"real".equals(line[0])){
+                        if(!"inteiro".equals(line[0].toLowerCase()) && !"real".equals(line[0].toLowerCase())){//MODIFICADO:Adicionado .toLowerCase() para suportar letras M e m
                             throw new RWordNotFoundException("Palavra reservada incorreta.");
                         }
                         break;
@@ -61,11 +61,11 @@ public class Analysis {
         Table t = new Table();
         String AT = "";
         for (String file1 : file){
-            String[] line = file1.split(" ");
+            String[] line = file1.split("\\s+");//MODIFICADO: não suportava multiplos espaços.OBS:deve ser tratado para retirar espaços duplicados
             if(line.length == 3){
                 if(":".equals(line[1])){
                     int c = 0;
-                    String[] var = line[2].split(",");
+                    String[] var = line[2].split("\\s*\\,\\s*");//MODIFICADO: não suportava espaços antes e depois da virgula
                     String s = line[0]+";";
                     for(String var1 : var){
                         c++;
@@ -111,7 +111,7 @@ public class Analysis {
                     }
                 }*/
             } else {
-                if("escreva".equals(line[0])){
+                if("escreva".equals(line[0].toLowerCase())){//MODIFICADO:Adicionado .toLowerCase() para suportar letras M e m
                     if (line[1].charAt(0) == '"' && line[1].charAt(line[1].length()-1) == '"'){
                         t.addRow("OUTS;"+line[1]+";");
                     } else {
@@ -119,7 +119,7 @@ public class Analysis {
                     }
                 }
             }
-            if("leia".equals(line[0])){
+            if("leia".equals(line[0].toLowerCase())){//MODIFICADO:Adicionado .toLowerCase() para suportar letras M e m
                     int i;
                     String var, saida;
                     saida = "IN;";
