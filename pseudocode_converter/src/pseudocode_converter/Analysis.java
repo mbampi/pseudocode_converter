@@ -76,13 +76,14 @@ public class Analysis {
                 if("=".equals(line[1])){
                     String exp = line[2];
                     if(exp.length() == 1 ){
-                       AT += "AT;"+line[0]+";"+exp+"\n";
+                       AT = "AT;"+line[0]+";"+exp;//MODIFICAOD += por =; RETIRADO \n
+                       t.addRow(AT); //MODIFICADO ADICIONADO .addrow(AT)
                     }
                     else {
                        PolishNotation pn = new PolishNotation(exp);
                        pn.toPostfix();
                        String e = pn.toString();
-                       AT += "AT;"+line[0]+";"+e+"\n";
+                       AT = "AT;"+line[0]+";"+e;//+= por =; RETIRADO \n
                        t.addRow(AT);
                     }
                 }

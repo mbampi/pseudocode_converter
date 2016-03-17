@@ -9,11 +9,15 @@ package pseudocode_converter;
  *
  * @author Matheus Dussin Bampi
  */
+
 public class Symbol {
     public String symbol;
             
-    public boolean isOperator(){
-        return(symbol.equals("+") || symbol.equals("-") || symbol.equals("/") || symbol.equals("*"));
+    public boolean isOperator(){ //MODIFICADO: Adicionado op logicos e relacionais
+        return(symbol.equals("+") || symbol.equals("-") || symbol.equals("/") || symbol.equals("*") ||
+            symbol.equals("não") || symbol.equals("nao") || symbol.equals("e") || symbol.equals("ou")||
+            symbol.equals("<>") || symbol.equals("==") || symbol.equals("<") || symbol.equals(">") || 
+            symbol.equals("<=") || symbol.equals(">="));
     }
     
     public boolean isOperand(){
