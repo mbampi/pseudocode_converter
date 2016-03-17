@@ -9,15 +9,19 @@ package pseudocode_converter;
  *
  * @author Matheus Dussin Bampi
  */
+
 public class Symbol {
     public String symbol;
             
-    public boolean isOperator(){
-        return(symbol.equals("+") || symbol.equals("-") || symbol.equals("/") || symbol.equals("*"));
+    public boolean isOperator(){ //MODIFICADO: Adicionado op logicos e relacionais
+        return(symbol.equals("+") || symbol.equals("-") || symbol.equals("/") || symbol.equals("*") ||
+            symbol.equals("não") || symbol.equals("nao") || symbol.equals("e") || symbol.equals("ou")||
+            symbol.equals("<>") || symbol.equals("==") || symbol.equals("<") || symbol.equals(">") || 
+            symbol.equals("<=") || symbol.equals(">="));
     }
     
     public boolean isOperand(){
-        return(symbol.matches("^[0-9]*[.]{0,1}[0-9]*$"));
+        return(!this.isOperator() && !this.isOpenParenthesis() && !this.isClosedParenthesis());//MODIFICADO: isOperand() não levava em conta variaveis, por não serem numeros. Ex: "n1"
     }
     
     public boolean isOpenParenthesis(){
