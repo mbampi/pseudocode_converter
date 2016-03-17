@@ -5,86 +5,293 @@
  */
 package pseudocode_converter;
 
+import java.lang.String;
+
 /**
  *
  * @author bruno
  */
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 public class Analysis {
     public String[] file;
-    
+    public Table t;
+
     public Analysis(String[] f) {
         this.file = f;
     }
-    
+
+    public void testStartEnd(String[] line) throws RWordNotFoundException{
+        if (!"inicio".equals(line[0]) && !"fim".equals(line[0])){
+                    throw new RWordNotFoundException("Palavra reservada incorreta.");
+                }
+    }
+
+    public void testDeclaration(String[] line,boolean flag) throws VarDeclarationException, RWordNotFoundException {
+        if(flag) {
+            String[] var = line[2].split(",");
+            for (String var1 : var) {
+                if (Character.isDigit(var1.charAt(0))) {
+                    throw new VarDeclarationException("Erro na declaração das variáveis.");
+                }
+            }
+            if(!"inteiro".equals(line[0]) && !"real".equals(line[0])){
+                throw new RWordNotFoundException("Palavra reservada incorreta.");
+            }
+        }
+        else {
+            int c = 0;
+            String[] var = line[2].split(",");
+            String s = line[0]+";";
+            for(String var1 : var){
+                c++;
+                s += var1+";";
+            }
+            t.addRow(c+";"+s);
+        }
+    }
+
+    public void testAttribution(String[] line, boolean flag) throws BadExpressionException{
+        if(flag) {
+            String exp = line[2];
+            for(int y = 0; y<exp.length()-1; y++){
+                // Testando repetição de operador.
+                if(exp.charAt(y) == '+' || exp.charAt(y) == '-' || exp.charAt(y) == '*' || exp.charAt(y) == '/'){
+                    if(exp.charAt(y+1) == '+' || exp.charAt(y+1) == '-' || exp.charAt(y+1) == '*' || exp.charAt(y+1) == '/'){
+                        throw new BadExpressionException("Erro na expressão.");
+                    }
+                }
+            }
+        }
+        else {
+            String exp = line[2];
+            String AT = "";
+            if(exp.length() == 1 ){
+               AT += "AT;"+line[0]+";"+exp+"\n";
+            }
+            else {
+               PolishNotation pn = new PolishNotation(exp);
+               pn.toPostfix();
+               String e = pn.toString();
+               AT += "AT;"+line[0]+";"+e+"\n";
+               t.addRow(AT);
+            }
+        }
+    }
+
+    public void testPrinting(String[] line) {
+
+            if (line[1].charAt(0) == '"' && line[1].charAt(line[1].length()-1) == '"'){
+                t.addRow("OUTS;"+line[1]+";");
+            } else {
+                t.addRow("OUTV;"+line[1]+";");
+            }
+    }
+
+    public void testReading(String[] line) {
+        int i;
+        String var, saida;
+        saida = "IN;";
+        for(i=1;line[i].charAt(line[i].length()-1) == ','; i++){
+            var = line[i].substring(0,line[i].length()-1);
+            saida += var+";";
+        }
+        saida += line[i]+";";
+        t.addRow(saida);
+    }
+
+    public void testIfElse(String[] line) {
+
+    }
+
     public boolean LexicalAnalysis() throws  RWordNotFoundException, VarDeclarationException, BadExpressionException{
-        
+
         for (String file1 : file) {
             String[] line = file1.split(" ");
             if(line.length == 1){
-                if (!"inicio".equals(line[0]) && !"fim".equals(line[0])){
-                    throw new RWordNotFoundException("Palavra reservada incorreta."); 
-                }
-            } 
+
+            }
             else if (line.length == 3){
                 switch (line[1]) {
                     case ":":
-                        // Testando se as variáveis foram declaradas corretamente.
-                        String[] var = line[2].split(",");
-                        for (String var1 : var) {
-                            if (Character.isDigit(var1.charAt(0))) {
-                                throw new VarDeclarationException("Erro na declaração das variáveis.");
-                            }
-                        }
-                        if(!"inteiro".equals(line[0]) && !"real".equals(line[0])){
-                            throw new RWordNotFoundException("Palavra reservada incorreta.");
-                        }
-                        break;
+                        this.testAttribution(line, true);
+                    break;
                     case "=":
-                        String exp = line[2];
-                        for(int y = 0; y<exp.length()-1; y++){
-                            // Testando repetição de operador.
-                            if(exp.charAt(y) == '+' || exp.charAt(y) == '-' || exp.charAt(y) == '*' || exp.charAt(y) == '/'){
-                                if(exp.charAt(y+1) == '+' || exp.charAt(y+1) == '-' || exp.charAt(y+1) == '*' || exp.charAt(y+1) == '/'){
-                                    throw new BadExpressionException("Erro na expressão.");
-                                }
-                            }
-                        }
-                        break;
+                        this.testDeclaration(line, true);
+                    break;
                 }
             }
         }
         return true;
     }
-    
-    public String SyntacticAnalysis() {
-        Table t = new Table();
-        String AT = "";
+
+    public String SyntacticAnalysis() throws VarDeclarationException, RWordNotFoundException, BadExpressionException {
+        t = new Table();
         for (String file1 : file){
             String[] line = file1.split(" ");
             if(line.length == 3){
                 if(":".equals(line[1])){
-                    int c = 0;
-                    String[] var = line[2].split(",");
-                    String s = line[0]+";";
-                    for(String var1 : var){
-                        c++;
-                        s += var1+";";
-                    }
-                    t.addRow(c+";"+s);
+                    this.testDeclaration(line, false);
                 }
                 if("=".equals(line[1])){
-                    String exp = line[2];
-                    if(exp.length() == 1 ){
-                       AT += "AT;"+line[0]+";"+exp+"\n";
-                    }
-                    else {
-                       PolishNotation pn = new PolishNotation(exp);
-                       pn.toPostfix();
-                       String e = pn.toString();
-                       AT += "AT;"+line[0]+";"+e+"\n";
-                       t.addRow(AT);
-                    }
+                    this.testAttribution(line, false);
                 }
                 /*if("se".equals(line[0])){
                     for (String line1 : line) {
@@ -110,28 +317,15 @@ public class Analysis {
                                 break;
                     }
                 }*/
-            } else {
                 if("escreva".equals(line[0])){
-                    if (line[1].charAt(0) == '"' && line[1].charAt(line[1].length()-1) == '"'){
-                        t.addRow("OUTS;"+line[1]+";");
-                    } else {
-                        t.addRow("OUTV;"+line[1]+";");
-                    }
+                    this.testPrinting(line);
                 }
-            }
-            if("leia".equals(line[0])){
-                    int i;
-                    String var, saida;
-                    saida = "IN;";
-                    for(i=1;line[i].charAt(line[i].length()-1) == ','; i++){
-                        var = line[i].substring(0,line[i].length()-1);
-                        saida += var+";";
-                    }
-                    saida += line[i]+";";
-                    t.addRow(saida);
+                if("leia".equals(line[0])){
+                    this.testReading(line);
+                }
             }
         }
         return t.toString();
     }
-    
+
 }
