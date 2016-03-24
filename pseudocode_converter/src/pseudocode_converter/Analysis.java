@@ -86,25 +86,32 @@ public class Analysis {
         char letra;
         int ultimaVirgula = 0;
         LinkedList<String> l = new LinkedList();
-        for (int i = 0; i < conteudo.length(); i++) {
-            letra = conteudo.charAt(i);
-            switch (letra) {
-                case '"':
-                    bool = !bool;
-                    break;
-                case ',':
-                    if (bool) {
-                        l.add(conteudo.substring(ultimaVirgula, i).replaceAll("[^\\s+|\\s+$]", ""));//remove espacos nas extremidades
-                    }
-                    ultimaVirgula = i;
-                    break;
+        if (conteudo.contains(",")) {
+            for (int i = 0; i < conteudo.length(); i++) {
+                letra = conteudo.charAt(i);
+                switch (letra) {
+                    case '"':
+                        bool = !bool;
+                        break;
+                    case ',':
+                        if (bool) {
+                            l.add(conteudo.substring(ultimaVirgula, i)); //.replaceAll("[^\\s+|\\s+$]", ""));remove espacos nas extremidades
+                            ultimaVirgula = i + 1;
+                        }
+
+                        break;
+                }
             }
         }
+        l.add(conteudo.substring(ultimaVirgula, conteudo.length() - 2));//.replace("[^\\s+|\\s+$]", ""));//remove espacos nas extremidades
         for (String l1 : l) {
-            if (l1.charAt(0) == '"') {
-                t.addRow("OUTS;" + l1 + ";");
-            } else {
-                t.addRow("OUTV;" + l1 + ";");
+            if (!l1.isEmpty()) {
+                l1 = l1.replace("[^\\s+|\\s+$]", "");
+                if (l1.contains("" + '"')) {
+                    t.addRow("OUTS;" + l1 + ";");
+                } else {
+                    t.addRow("OUTV;" + l1 + ";");
+                }
             }
         }
     }
@@ -140,20 +147,21 @@ public class Analysis {
     public String SyntacticAnalysis() throws VarDeclarationException, RWordNotFoundException, BadExpressionException {
         t = new Table();
         for (String linha : file) { //MOD: String "file1" por "linha"
-            if (":".matches(linha)) {
+            linha = linha.toLowerCase();
+            if (linha.contains(":")) {
                 String[] lado = linha.split("\\s*:\\s*", 2); // divide em 2 substring que dividem no primeiro ':' encontrado
                 this.testDeclaration(lado[0], lado[1], false);
-            } else if ("se".matches(linha)) {
+            } else if ("se".matches(linha)) { //"se".matches(linha) por linha.contais("se");
 
             } else if ("senao".matches(linha)) {
 
             } else if ("fimse".matches(linha)) {
 
-            } else if ("escreva".matches(linha.toLowerCase())) {
-                this.testPrinting(linha.split("escreva[\\s*(\\s*]", 2)[1].split("[\\s*);\\s*$]", 2)[0]);
-            } else if ("leia".matches(linha.toLowerCase())) {
-                this.testReading(linha.split("leia[\\s*(\\s*]", 2)[1]);
-            } else if ("=".matches(linha)) {
+            } else if (linha.contains("escreva")) {
+                this.testPrinting(linha.split("escreva[\\s*(\\s*)]", 2)[1]);//.split("[\\s*);\\s*$]", 2)[0]);
+            } else if (linha.contains("leia")) {
+                this.testReading(linha.split("leia[\\s*(\\s*]", 2)[1].split("[\\s*);\\s*$]", 2)[0]);
+            } else if (linha.contains("=")) {
                 String[] lado = linha.split("=\\s*", 2); // divide em 2 substring que dividem no primeiro '=' encontrado
                 this.testAttribution(lado[0], lado[1], false);
             }
