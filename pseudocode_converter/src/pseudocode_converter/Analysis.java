@@ -26,10 +26,6 @@ public class Analysis {
         }
     }
 
-    /*
-    String esq e dir no ligar de String[] line
-    esq == line[0] && dir == line[2]
-     */
     public void testDeclaration(String esq, String dir, boolean flag) throws VarDeclarationException, RWordNotFoundException {
         if (flag) {
             // Testando se as variáveis foram declaradas corretamente.
@@ -39,12 +35,12 @@ public class Analysis {
                     throw new VarDeclarationException("Erro na declaração das variáveis.");
                 }
             }
-            if (!"inteiro".equals(esq.toLowerCase()) && !"real".equals(esq.toLowerCase())) {//MODIFICADO:Adicionado .toLowerCase() para suportar letras M e m
+            if (!"inteiro".equals(esq.toLowerCase()) && !"real".equals(esq.toLowerCase())) {//.toLowerCase() para suportar letras M e m
                 throw new RWordNotFoundException("Palavra reservada incorreta.");
             }
         } else {
             int c = 0;
-            String[] var = dir.split("\\s*\\,\\s*");//MODIFICADO: não suportava espaços antes e depois da virgula
+            String[] var = dir.split("\\s*\\,\\s*");
             String s = esq + ";";
             for (String var1 : var) {
                 c++;
@@ -76,7 +72,7 @@ public class Analysis {
             PolishNotation pn = new PolishNotation(exp);
             pn.toPostfix();
             String e = pn.toString();
-            AT = "AT;" + esq + ";" + e;//+= por =; RETIRADO \n
+            AT = "AT;" + esq + ";" + e;
             t.addRow(AT);
         }
     }
@@ -95,7 +91,7 @@ public class Analysis {
                         break;
                     case ',':
                         if (bool) {
-                            l.add(conteudo.substring(ultimaVirgula, i)); //.replaceAll("[^\\s+|\\s+$]", ""));remove espacos nas extremidades
+                            l.add(conteudo.substring(ultimaVirgula, i).trim());//.replaceAll("[^\\s+|\\s+$]", "")); remove espacos nas extremidades
                             ultimaVirgula = i + 1;
                         }
 
@@ -103,7 +99,7 @@ public class Analysis {
                 }
             }
         }
-        l.add(conteudo.substring(ultimaVirgula, conteudo.length() - 2));//.replace("[^\\s+|\\s+$]", ""));//remove espacos nas extremidades
+        l.add(conteudo.substring(ultimaVirgula, conteudo.length() - 2).trim());//.replace("[^\\s+|\\s+$]", "")); remove espacos nas extremidades
         for (String l1 : l) {
             if (!l1.isEmpty()) {
                 l1 = l1.replace("[^\\s+|\\s+$]", "");
@@ -146,24 +142,23 @@ public class Analysis {
 
     public String SyntacticAnalysis() throws VarDeclarationException, RWordNotFoundException, BadExpressionException {
         t = new Table();
-        for (String linha : file) { //MOD: String "file1" por "linha"
-            linha = linha.toLowerCase();
+        for (String linha : file) {
             if (linha.contains(":")) {
-                String[] lado = linha.split("\\s*:\\s*", 2); // divide em 2 substring que dividem no primeiro ':' encontrado
-                this.testDeclaration(lado[0], lado[1], false);
-            } else if ("se".matches(linha)) { //"se".matches(linha) por linha.contais("se");
+                String[] lado = linha.split(":", 2); // Divide em 2 substring que dividem no primeiro ':' encontrado
+                this.testDeclaration(lado[0].trim(), lado[1].trim(), false);
+            } else if ("se".matches(linha.toLowerCase())) { //uso do lowerCase para suportar M e m
 
-            } else if ("senao".matches(linha)) {
+            } else if ("senao".matches(linha.toLowerCase())) {
 
-            } else if ("fimse".matches(linha)) {
+            } else if ("fimse".matches(linha.toLowerCase())) {
 
-            } else if (linha.contains("escreva")) {
-                this.testPrinting(linha.split("escreva[\\s*(\\s*)]", 2)[1]);//.split("[\\s*);\\s*$]", 2)[0]);
-            } else if (linha.contains("leia")) {
-                this.testReading(linha.split("leia[\\s*(\\s*]", 2)[1].split("[\\s*);\\s*$]", 2)[0]);
+            } else if (linha.toLowerCase().contains("escreva")) {
+                this.testPrinting(linha.split("\\(", 2)[1].trim());  //.split("[\\s*);\\s*$]", 2)[0]); Tirar ); do final
+            } else if (linha.toLowerCase().contains("leia")) {
+                this.testReading(linha.split("\\(", 2)[1].trim().split("[\\s*);\\s*$]", 2)[0].trim());
             } else if (linha.contains("=")) {
-                String[] lado = linha.split("=\\s*", 2); // divide em 2 substring que dividem no primeiro '=' encontrado
-                this.testAttribution(lado[0], lado[1], false);
+                String[] lado = linha.split("=", 2); // divide em 2 substring que dividem no primeiro '=' encontrado
+                this.testAttribution(lado[0].trim(), lado[1].replaceAll(" ", ""), false);
             }
         }
         return t.toString();
