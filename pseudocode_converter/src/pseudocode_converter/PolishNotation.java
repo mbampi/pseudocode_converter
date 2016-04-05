@@ -21,9 +21,18 @@ public class PolishNotation {
         Symbol saux;
         String str;
         String num = "";
-        
+        s = s.replaceAll("\\+-", "\\-");
+        s = s.replaceAll("\\-+", "\\-");
+        s = s.replaceAll("\\++", "\\+");
+        s = s.replaceAll("\\--", "\\+");
+
         while(i < s.length()){
             str = "" + s.charAt(i);
+            if('<'==s.charAt(i) && '>'==s.charAt(i+1) || '<'==s.charAt(i) && '='==s.charAt(i+1) 
+                    || '>'==s.charAt(i) && '='==s.charAt(i+1) || '='==s.charAt(i) && '='==s.charAt(i+1)){
+                i++;
+                str += s.charAt(i);
+            }
             symb = new Symbol();
             symb.symbol = str;
             if(symb.isOperand()){
@@ -110,4 +119,3 @@ public class PolishNotation {
         return str;
     }
 }
-
