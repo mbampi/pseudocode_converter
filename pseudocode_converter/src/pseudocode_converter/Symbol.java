@@ -13,25 +13,30 @@ package pseudocode_converter;
 public class Symbol {
     public String symbol;
             
-    public boolean isOperator(){ //MODIFICADO: Adicionado op logicos e relacionais
+    // Retorna se é ou não um operador
+    public boolean isOperator(){
         return(symbol.equals("+") || symbol.equals("-") || symbol.equals("/") || symbol.equals("*") ||
             symbol.equals("não") || symbol.equals("nao") || symbol.equals("&") || symbol.equals("ou")||
             symbol.equals("<>") || symbol.equals("==") || symbol.equals("<") || symbol.equals(">") || 
             symbol.equals("<=") || symbol.equals(">="));
     }
     
+    // Retorna se é ou não um operando
     public boolean isOperand(){
         return(!this.isOperator() && !this.isOpenParenthesis() && !this.isClosedParenthesis());//MODIFICADO: isOperand() não levava em conta variaveis, por não serem numeros. Ex: "n1"
     }
     
+    // Retorna se é ou não um abre parenteses
     public boolean isOpenParenthesis(){
         return(symbol.equals("("));
     }
     
+    // Retorna se é ou não um fecha parenteses
     public boolean isClosedParenthesis(){
         return(symbol.equals(")"));
     }
     
+    // Testa prioridade do operando (para PolishNotation)
     public int testPriority(){
         switch(symbol){
             case "*": case "/":
@@ -47,6 +52,7 @@ public class Symbol {
         }
     }
     
+    // Calcula dois operadores a partir do this.Symbol
     public Symbol calculate(Symbol s1, Symbol s2){
         float n1 = Float.parseFloat(s1.symbol);
         float n2 = Float.parseFloat(s2.symbol);
