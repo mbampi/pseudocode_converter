@@ -21,10 +21,7 @@ public class PolishNotation {
         Symbol saux;
         String str;
         String num = "";
-        s = s.replaceAll("\\+-", "\\-");
-        s = s.replaceAll("\\-+", "\\-");
-        s = s.replaceAll("\\++", "\\+");
-        s = s.replaceAll("\\--", "\\+");
+        s = s.replaceAll("\\+\\-", "\\-").replaceAll("\\-\\+", "\\-").replaceAll("\\+\\+", "\\+").replaceAll("(\\-\\-)", "\\+");
 
         while(i < s.length()){
             str = "" + s.charAt(i);

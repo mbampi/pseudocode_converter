@@ -15,7 +15,7 @@ public class Symbol {
             
     public boolean isOperator(){ //MODIFICADO: Adicionado op logicos e relacionais
         return(symbol.equals("+") || symbol.equals("-") || symbol.equals("/") || symbol.equals("*") ||
-            symbol.equals("não") || symbol.equals("nao") || symbol.equals("e") || symbol.equals("ou")||
+            symbol.equals("não") || symbol.equals("nao") || symbol.equals("&") || symbol.equals("ou")||
             symbol.equals("<>") || symbol.equals("==") || symbol.equals("<") || symbol.equals(">") || 
             symbol.equals("<=") || symbol.equals(">="));
     }
