@@ -1,6 +1,7 @@
-inicio
+﻿inicio
 inteiro : n1,n2
 real : r1,r2,r3
+logico: var1, var2
 n1 = 3
 n2 = 7*n1
 leia n3

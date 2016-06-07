@@ -36,4 +36,16 @@ public class Table {
         }
         return s;
     }
+    
+    public String getRow(int n){
+        return this.row.get(n);
+    }
+    
+    public void setRow(int n, String s){
+        this.row.replace(n, s);
+    }
+    
+    public int getCount(){
+        return count;
+    }
 }

@@ -23,31 +23,28 @@ public class Main {
         System.out.println("Digite o arquivo que quer converter!");
         String fileName = read.nextLine();
         ArrayList<String> fileList = new ArrayList<>();
-        String[] file = null;
+        String[] file;
         
         try {
             FileReader fr = new FileReader("/home/bruno/repo/pseudocode_converter/"+fileName);
             BufferedReader br = new BufferedReader(fr);
-            
             String line = br.readLine();
             
-            for(int i = 1; line != null; i++){
+            while(line != null){
                 fileList.add(line);
                 line = br.readLine();
             }
-            
             file = new String[fileList.size()];
             file = (String[]) fileList.toArray(file);
-            
             for(String s : file)
                 System.out.println(s);
             
             Analysis a = new Analysis(file);
-            if(a.LexicalAnalysis()){
-                System.out.println("Sem erros no código.");
-                System.out.println(a.SyntacticAnalysis());
+            if(a.lexicalAnalysis()){
+                System.out.println("Sem erros no código.\n\n");
+                System.out.println(a.syntacticAnalysis());
             } else {
-                // Tratar erros...
+                // TRATAR ERROS
             }
             br.close();
         }
@@ -56,7 +53,5 @@ public class Main {
             System.err.printf("Erro na abertura do arquivo: %s.\n",
             e.getMessage());
         }
-        
     }
-    
 }
